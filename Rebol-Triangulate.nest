@@ -1,0 +1,71 @@
+;-    .-.                                                                       
+;-   /'v'\   SISKIN-Builder project file                                        
+;-  (/uOu\)  https://github.com/Siskin-framework/Builder/                       
+;-===="="=======================================================================
+;-      For: https://github.com/Siskin-framework/Rebol-Triangulate              
+;-------------------------------------------------------------------------------
+
+github: @triangle
+compiler: gcc
+strip:    on
+
+include: %rebol/src/include/
+include: %triangle/src/
+file:    %triangle/src/triangle.c
+file:    %src/rebol-triangulate.c
+defines: TRILIBRARY
+flags:   [-O3 shared]
+
+defines: [
+	NO_TIMER
+	REDUCED 	; to eliminate all features that are primarily of research interest
+	CPU86
+	;CDT_ONLY   ; includes only constrained Delaunay triangulation algorithm
+]
+
+#if Linux? [
+	defines: LINUX
+	library: %m
+]
+
+#if Windows? [
+	defines: _CRT_SECURE_NO_WARNINGS
+	upx: on
+]
+
+#if macOS? [
+	compiler: clang
+]
+
+arch-x64: [
+	arch: x64
+	#if Linux? [
+		defines: TO_LINUX_X64
+		defines: __LP64__ ; has long (integer) 64 bits
+	]
+	#if Windows? [
+		defines: TO_WIN32_X64
+		defines: __LLP64__
+	]
+]
+arch-x86: [
+	arch: x86
+	#if Linux? [
+		defines: TO_LINUX_X86
+	]
+	#if Windows? [
+		resource-options: "--target=pe-i386"
+		defines: TO_WIN32
+	]
+]
+
+eggs: [
+	"Rebol/triangulate extension 32bit" [
+		name:    %triangulate-x86
+		:arch-x86
+	]
+	"Rebol/triangulate extension 64bit" [
+		name:    %triangulate-x64
+		:arch-x64
+	]
+]
