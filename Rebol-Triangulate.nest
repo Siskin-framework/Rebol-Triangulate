@@ -19,7 +19,7 @@ flags:   [-O3 shared]
 defines: [
 	NO_TIMER
 	REDUCED 	; to eliminate all features that are primarily of research interest
-	CPU86
+	;CPU86
 	;CDT_ONLY   ; includes only constrained Delaunay triangulation algorithm
 ]
 
