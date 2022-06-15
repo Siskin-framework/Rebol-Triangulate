@@ -1,0 +1,114 @@
+name: 'Rebol-Triangulate CI'
+on:
+  # Triggers the workflow on push or pull request events but only for the main branch
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+jobs:
+  windows:
+    strategy:
+      fail-fast: true
+    runs-on: windows-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: Install Siskin Builder
+      uses: oldes/install-siskin@v0.4.1
+
+    - name: Build 64bit Rebol Triangulate extension
+      run: ./siskin Rebol-Triangulate.nest [msvc %triangulate-x64]
+
+    - name: Prepare 64bit Rebol Triangulate extension
+      run:  COPY .\msvc\Release-x64\triangulate-x64.dll triangulate-windows-x64.rebx
+
+    - name: Install Rebol for extension test
+      uses: oldes/install-rebol@v3.8.0
+
+    - name: Test extension
+      run:  ./rebol3 test/triangulate-test.r3
+
+    ###############################################################################
+    # Collecting build artifacts...
+    - uses: actions/upload-artifact@v2
+      with:
+        name: Rebol-Triangulate-CI-${{github.run_id}}
+        path: ./triangulate-windows-x64.rebx
+
+  linux:
+    strategy:
+      fail-fast: true
+      matrix:
+        os: [ubuntu-18.04]
+        #os: [ubuntu-20.04, ubuntu-18.04]
+
+    runs-on: ${{ matrix.os }}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Install Siskin Builder
+        uses: oldes/install-siskin@v0.4.1
+
+#      - name: Build 32bit Rebol Triangulate extension
+#        run: ./siskin Rebol-Triangulate.nest [%triangulate-linux-x86]
+
+      - name: Build 64bit Rebol Triangulate extension
+        run: ./siskin Rebol-Triangulate.nest [%triangulate-x64]
+
+#      - name: Prepare 32bit Rebol Triangulate extension
+#        run:  |
+#          mv .\build\triangulate-linux-x86.so triangulate-linux-x86.rebx
+#          gzip -9 ./triangulate-linux-x86.rebx
+
+      - name: Prepare 64bit Rebol Triangulate extension
+        run:  mv ./build/triangulate-x64.so triangulate-linux-x64.rebx
+
+      - name: Install Rebol for extension test
+        uses: oldes/install-rebol@v3.8.0
+
+      - name: Test extension
+        run:  ./rebol3 test/triangulate-test.r3
+
+      - name: Compress 64bit Rebol Triangulate extension
+        run:  gzip -9 ./triangulate-linux-x64.rebx
+
+      - uses: actions/upload-artifact@v2
+        with:
+          name: Rebol-Triangulate-CI-${{github.run_id}}
+          path: ./triangulate-linux-*
+
+  macos:
+    runs-on: macos-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Install Siskin Builder
+        uses: oldes/install-siskin@v0.4.1
+
+      - name: Build 64bit Rebol Triangulate extension
+        run: ./siskin Rebol-Triangulate.nest [%triangulate-x64]
+
+      - name: Prepare 64bit Rebol Triangulate extension
+        run:  mv ./build/triangulate-x64.dylib triangulate-macos-x64.rebx
+
+      - name: Install Rebol for extension test
+        uses: oldes/install-rebol@v3.8.0
+
+      - name: Test extension
+        run:  ./rebol3 test/triangulate-test.r3
+
+      - name: Compress 64bit Rebol Triangulate extension
+        run:  gzip -9 ./triangulate-macos-x64.rebx
+
+      - uses: actions/upload-artifact@v2
+        with:
+          name: Rebol-Triangulate-CI-${{github.run_id}}
+          path: ./triangulate-macos-*
