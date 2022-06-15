@@ -37,6 +37,9 @@ defines: [
 	compiler: clang
 ]
 
+#if Posix? [
+	flag: fPIC
+]
 arch-x64: [
 	arch: x64
 	#if Linux? [
