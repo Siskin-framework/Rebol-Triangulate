@@ -39,6 +39,7 @@ defines: [
 
 #if Posix? [
 	flag: fPIC
+	define: ANSI_DECLARATORS
 ]
 arch-x64: [
 	arch: x64

@@ -61,15 +61,14 @@ RXIEXT int RX_Call(int cmd, RXIFRM *frm, void *ctx) {
 /*                                                                           */
 /*****************************************************************************/
 
-void Do_Report(io, markers, reporttriangles, reportneighbors, reportsegments,
-			reportedges, reportnorms)
-struct triangulateio *io;
-int markers;
-int reporttriangles;
-int reportneighbors;
-int reportsegments;
-int reportedges;
-int reportnorms;
+void Do_Report(
+	struct triangulateio *io,
+	int markers,
+	int reporttriangles,
+	int reportneighbors,
+	int reportsegments,
+	int reportedges,
+	int reportnorms)
 {
 	int i, j;
 
@@ -164,29 +163,44 @@ int reportnorms;
 
 REBOOL Triangulate(RXIFRM *frm) {
 	struct triangulateio in, mid, out, vorout;
-	RXIARG *argIn  = RXA_OBJECT(frm, 1);
-	RXIARG *argOut = RXA_OBJECT(frm, 2);
+	REBSER *objIn  = (REBSER*)RXA_OBJECT(frm, 1);
+	REBSER *objOut = (REBSER*)RXA_OBJECT(frm, 2);
 	RXIARG arg;
 	REBSER *vect;
 	REBCNT type;
-	REBINT real_bits = sizeof(REAL) << 3;
-	REBINT int_bits  = sizeof(int)  << 3;
+//	REBINT real_bits = sizeof(REAL) << 3;
+//	REBINT int_bits  = sizeof(int)  << 3;
 	REBOOL report = FALSE;
 	char *error = NULL;
-	char *flags = "             ";
-
+	char flags[12];
+	
+	u32 wReport         = RL_MAP_WORD((REBYTE*)"report");
+	u32 wPoints         = RL_MAP_WORD((REBYTE*)"points");
+	u32 wAttributes     = RL_MAP_WORD((REBYTE*)"attributes");
+	u32 wMarkers        = RL_MAP_WORD((REBYTE*)"markers");
+	u32 wRegions        = RL_MAP_WORD((REBYTE*)"regions");
+	u32 wSegments       = RL_MAP_WORD((REBYTE*)"segments");
+	u32 wSegmentMarkers = RL_MAP_WORD((REBYTE*)"segment-markers");
+	u32 wEdges          = RL_MAP_WORD((REBYTE*)"edges");
+	u32 wTriangles      = RL_MAP_WORD((REBYTE*)"triangles");
+	u32 wVPoints        = RL_MAP_WORD((REBYTE*)"v-points");
+	u32 wVEdges         = RL_MAP_WORD((REBYTE*)"v-edges");
+	u32 wVNorms         = RL_MAP_WORD((REBYTE*)"v-norms");
+	u32 wVAttributes    = RL_MAP_WORD((REBYTE*)"v-attributes");
+	
+	
 	memset(&in,     0, sizeof(triangulateio));
 	memset(&mid,    0, sizeof(triangulateio));
 	memset(&out,    0, sizeof(triangulateio));
 	memset(&vorout, 0, sizeof(triangulateio));
 
-	type = RL_GET_FIELD(RXA_OBJECT(frm, 1), RL_MAP_WORD("report"), &arg);
+	type = RL_GET_FIELD(RXA_OBJECT(frm, 1), wReport, &arg);
 	if(type == RXT_LOGIC && arg.int32a != 0) {
 		report = TRUE;
 	}
 
 	//puts("points");
-	type = RL_GET_FIELD(RXA_OBJECT(frm, 1), RL_MAP_WORD("points"), &arg);
+	type = RL_GET_FIELD(objIn, wPoints, &arg);
 	if(type == RXT_VECTOR) {
 		vect = (REBSER*)arg.series;
 		ASSERT_64BIT_VECT(vect);
@@ -200,7 +214,7 @@ REBOOL Triangulate(RXIFRM *frm) {
 	}
 
 	//puts("attributes");
-	type = RL_GET_FIELD(RXA_OBJECT(frm, 1), RL_MAP_WORD("attributes"), &arg);
+	type = RL_GET_FIELD(objIn, wAttributes, &arg);
 	if(type == RXT_VECTOR) {
 		vect = (REBSER*)arg.series;
 		ASSERT_64BIT_VECT(vect);
@@ -219,7 +233,7 @@ REBOOL Triangulate(RXIFRM *frm) {
 	}
 
 	//puts("markers");
-	type = RL_GET_FIELD(RXA_OBJECT(frm, 1), RL_MAP_WORD("markers"), &arg);
+	type = RL_GET_FIELD(objIn, wMarkers, &arg);
 	if(type == RXT_VECTOR) {
 		vect = (REBSER*)arg.series;
 		ASSERT_64BIT_VECT(vect);
@@ -235,7 +249,7 @@ REBOOL Triangulate(RXIFRM *frm) {
 	}
 
 	//puts("regions");
-	type = RL_GET_FIELD(RXA_OBJECT(frm, 1), RL_MAP_WORD("regions"), &arg);
+	type = RL_GET_FIELD(objIn, wRegions, &arg);
 	if(type == RXT_VECTOR) {
 		vect = (REBSER*)arg.series;
 		ASSERT_64BIT_VECT(vect);
@@ -250,7 +264,6 @@ REBOOL Triangulate(RXIFRM *frm) {
 		error = "Regions must be defined using VECTOR value!";
 		goto finish;
 	}
-
 
 	/* Triangulate the points.  Switches are chosen to read and write a  */
 	/*   PSLG (p), preserve the convex hull (c), number everything from  */
@@ -281,116 +294,116 @@ REBOOL Triangulate(RXIFRM *frm) {
 //	printf("sizeof(REAL): %i real_bits: %i mid.numberofpoints: %i\n", sizeof(REAL), real_bits, mid.numberofpoints);
 
 	if(mid.numberofpoints > 0) {
-		type = RL_GET_FIELD(RXA_OBJECT(frm, 2), RL_MAP_WORD("points"), &arg);
+		type = RL_GET_FIELD(objOut, wPoints, &arg);
 		if(type != 0) {
 			vect = RL_MAKE_VECTOR(1, 0, 1, 64, 2 * mid.numberofpoints );
 			memcpy((void*)vect->data, (const void*)mid.pointlist, sizeof(REAL) * mid.numberofpoints * 2);
 			arg.series = vect;
 			arg.index = 0;
-			RL_SET_FIELD(RXA_OBJECT(frm, 2), RL_MAP_WORD("points"), arg, RXT_VECTOR);
+			RL_SET_FIELD(objOut, wPoints, arg, RXT_VECTOR);
 		}
 
-		type = RL_GET_FIELD(RXA_OBJECT(frm, 2), RL_MAP_WORD("markers"), &arg);
+		type = RL_GET_FIELD(objOut, wMarkers, &arg);
 		if (type != 0) {
 			vect = RL_MAKE_VECTOR(0, 0, 1, 32, mid.numberofpoints);
 			memcpy((void*)vect->data, (const void*)mid.pointmarkerlist, sizeof(int) * mid.numberofpoints);
 			arg.series = vect;
 			arg.index = 0;
-			RL_SET_FIELD(RXA_OBJECT(frm, 2), RL_MAP_WORD("markers"), arg, RXT_VECTOR);
+			RL_SET_FIELD(RXA_OBJECT(frm, 2), wMarkers, arg, RXT_VECTOR);
 		}
 	}
 
 	if(mid.numberofpointattributes) {
-		type = RL_GET_FIELD(RXA_OBJECT(frm, 2), RL_MAP_WORD("attributes"), &arg);
+		type = RL_GET_FIELD(objOut, wAttributes, &arg);
 		if (type != 0) {
 			vect = RL_MAKE_VECTOR(1, 0, 1, 64, mid.numberofpointattributes * mid.numberofpoints);
 			memcpy((void*)vect->data, (const void*)mid.pointattributelist, sizeof(REAL) * mid.numberofpointattributes * mid.numberofpoints);
 			arg.series = vect;
 			arg.index = 0;
-			RL_SET_FIELD(RXA_OBJECT(frm, 2), RL_MAP_WORD("attributes"), arg, RXT_VECTOR);
+			RL_SET_FIELD(objOut, wAttributes, arg, RXT_VECTOR);
 		}
 	}
 
 	if (mid.numberofsegments > 0) {
-		type = RL_GET_FIELD(RXA_OBJECT(frm, 2), RL_MAP_WORD("segments"), &arg);
+		type = RL_GET_FIELD(objOut, wSegments, &arg);
 		if (type != 0) {
 			vect = RL_MAKE_VECTOR(0, 0, 1, 32, 2 * mid.numberofsegments);
 			memcpy((void*)vect->data, (const void*)mid.segmentlist, sizeof(int) * mid.numberofsegments * 2);
 			arg.series = vect;
 			arg.index = 0;
-			RL_SET_FIELD(RXA_OBJECT(frm, 2), RL_MAP_WORD("segments"), arg, RXT_VECTOR);
+			RL_SET_FIELD(objOut, wSegments, arg, RXT_VECTOR);
 		}
-		type = RL_GET_FIELD(RXA_OBJECT(frm, 2), RL_MAP_WORD("segment-markers"), &arg);
+		type = RL_GET_FIELD(objOut, wSegmentMarkers, &arg);
 		if (type != 0) {
 			vect = RL_MAKE_VECTOR(0, 0, 1, 32, mid.numberofsegments);
 			memcpy((void*)vect->data, (const void*)mid.segmentmarkerlist, sizeof(int) * mid.numberofsegments);
 			arg.series = vect;
 			arg.index = 0;
-			RL_SET_FIELD(RXA_OBJECT(frm, 2), RL_MAP_WORD("segment-markers"), arg, RXT_VECTOR);
+			RL_SET_FIELD(objOut, wSegmentMarkers, arg, RXT_VECTOR);
 		}
 	}
 
 	if(mid.numberofedges > 0) {
-		type = RL_GET_FIELD(RXA_OBJECT(frm, 2), RL_MAP_WORD("edges"), &arg);
+		type = RL_GET_FIELD(objOut, wEdges, &arg);
 		if(type != 0) {
 			vect = RL_MAKE_VECTOR(0, 0, 1, 32, 2 * mid.numberofedges );
 			memcpy((void*)vect->data, (const void*)mid.edgelist, sizeof(int) * mid.numberofedges * 2);
 			arg.series = vect;
 			arg.index = 0;
-			RL_SET_FIELD(RXA_OBJECT(frm, 2), RL_MAP_WORD("edges"), arg, RXT_VECTOR);
+			RL_SET_FIELD(objOut, wEdges, arg, RXT_VECTOR);
 		}
 	}
 
 	if (mid.numberoftriangles > 0) {
-		type = RL_GET_FIELD(RXA_OBJECT(frm, 2), RL_MAP_WORD("triangles"), &arg);
+		type = RL_GET_FIELD(objOut, wTriangles, &arg);
 		if (type != 0) {
 			vect = RL_MAKE_VECTOR(0, 0, 1, 32, 3 * mid.numberoftriangles);
 			memcpy((void*)vect->data, (const void*)mid.edgelist, sizeof(int) * mid.numberoftriangles * 3);
 			arg.series = vect;
 			arg.index = 0;
-			RL_SET_FIELD(RXA_OBJECT(frm, 2), RL_MAP_WORD("triangles"), arg, RXT_VECTOR);
+			RL_SET_FIELD(objOut, wTriangles, arg, RXT_VECTOR);
 		}
 	}
 
 	if (vorout.numberofpoints > 0) {
-		type = RL_GET_FIELD(RXA_OBJECT(frm, 2), RL_MAP_WORD("v-points"), &arg);
+		type = RL_GET_FIELD(objOut, wVPoints, &arg);
 		if (type != 0) {
 			vect = RL_MAKE_VECTOR(1, 0, 1, 64, 2 * vorout.numberofpoints);
 			memcpy((void*)vect->data, (const void*)vorout.pointlist, sizeof(REAL) * vorout.numberofpoints * 2);
 			arg.series = vect;
 			arg.index = 0;
-			RL_SET_FIELD(RXA_OBJECT(frm, 2), RL_MAP_WORD("v-points"), arg, RXT_VECTOR);
+			RL_SET_FIELD(objOut, wVPoints, arg, RXT_VECTOR);
 		}
 	}
 
 	if (vorout.numberofedges > 0) {
-		type = RL_GET_FIELD(RXA_OBJECT(frm, 2), RL_MAP_WORD("v-edges"), &arg);
+		type = RL_GET_FIELD(objOut, wVEdges, &arg);
 		if (type != 0) {
 			vect = RL_MAKE_VECTOR(0, 0, 1, 32, 2 * vorout.numberofedges);
 			memcpy((void*)vect->data, (const void*)vorout.edgelist, sizeof(int) * vorout.numberofedges * 2);
 			arg.series = vect;
 			arg.index = 0;
-			RL_SET_FIELD(RXA_OBJECT(frm, 2), RL_MAP_WORD("v-edges"), arg, RXT_VECTOR);
+			RL_SET_FIELD(objOut, wEdges, arg, RXT_VECTOR);
 		}
 	}
 	if (vorout.numberofedges > 0) {
-		type = RL_GET_FIELD(RXA_OBJECT(frm, 2), RL_MAP_WORD("v-norms"), &arg);
+		type = RL_GET_FIELD(objOut, wVNorms, &arg);
 		if (type != 0) {
 			vect = RL_MAKE_VECTOR(1, 0, 1, 64, 2 * vorout.numberofedges);
 			memcpy((void*)vect->data, (const void*)vorout.normlist, sizeof(int) * vorout.numberofedges * 2);
 			arg.series = vect;
 			arg.index = 0;
-			RL_SET_FIELD(RXA_OBJECT(frm, 2), RL_MAP_WORD("v-norms"), arg, RXT_VECTOR);
+			RL_SET_FIELD(objOut, wVNorms, arg, RXT_VECTOR);
 		}
 	}
 	if (vorout.numberofpointattributes) {
-		type = RL_GET_FIELD(RXA_OBJECT(frm, 2), RL_MAP_WORD("v-attributes"), &arg);
+		type = RL_GET_FIELD(objOut, wVAttributes, &arg);
 		if (type != 0) {
 			vect = RL_MAKE_VECTOR(1, 0, 1, 64, vorout.numberofpointattributes * vorout.numberofpoints);
 			memcpy((void*)vect->data, (const void*)vorout.pointattributelist, sizeof(REAL) * vorout.numberofpointattributes * vorout.numberofpoints);
 			arg.series = vect;
 			arg.index = 0;
-			RL_SET_FIELD(RXA_OBJECT(frm, 2), RL_MAP_WORD("v-attributes"), arg, RXT_VECTOR);
+			RL_SET_FIELD(objOut, wVAttributes, arg, RXT_VECTOR);
 		}
 	}
 
