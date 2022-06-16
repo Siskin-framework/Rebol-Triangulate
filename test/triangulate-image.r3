@@ -1,5 +1,6 @@
 Rebol [
 	Title: "Trianguale image (resize and add line effect)"
+	needs: 3.9.0 ; to automatically install Blend2D extension
 ]
 
 random/seed 2021
