@@ -23,7 +23,7 @@ jobs:
       uses: oldes/install-siskin@v0.7.1
 
     - name: Build 64bit Rebol Triangulate extension
-      run: ./siskin Rebol-Triangulate.nest [msvc %triangulate-x64]
+      run: ./siskin Rebol-Triangulate.nest --msvc %triangulate-x64
 
     - name: Prepare 64bit Rebol Triangulate extension
       run:  COPY .\msvc\Release-x64\triangulate-x64.dll triangulate-windows-x64.rebx
@@ -63,7 +63,7 @@ jobs:
 #        run: ./siskin Rebol-Triangulate.nest [%triangulate-linux-x86]
 
       - name: Build 64bit Rebol Triangulate extension
-        run: ./siskin Rebol-Triangulate.nest [%triangulate-x64]
+        run: ./siskin Rebol-Triangulate.nest %triangulate-x64
 
 #      - name: Prepare 32bit Rebol Triangulate extension
 #        run:  |
@@ -100,7 +100,7 @@ jobs:
         uses: oldes/install-siskin@v0.7.1
 
       - name: Build 64bit Rebol Triangulate extension
-        run: ./siskin Rebol-Triangulate.nest [%triangulate-x64]
+        run: ./siskin Rebol-Triangulate.nest %triangulate-x64
 
       - name: Prepare 64bit Rebol Triangulate extension
         run:  mv ./build/triangulate-x64.dylib triangulate-macos-x64.rebx
