@@ -57,6 +57,6 @@ out: object [
 	v-norms:         none  
 ]
 
-triangulate inp out
 ? inp
+triangulate inp out
 ? out

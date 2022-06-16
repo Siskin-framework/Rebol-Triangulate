@@ -20,7 +20,7 @@ jobs:
       uses: actions/checkout@v2
 
     - name: Install Siskin Builder
-      uses: oldes/install-siskin@v0.4.1
+      uses: oldes/install-siskin@v0.7.2
 
     - name: Build 64bit Rebol Triangulate extension
       run: ./siskin Rebol-Triangulate.nest [msvc %triangulate-x64]
@@ -54,7 +54,7 @@ jobs:
         uses: actions/checkout@v2
 
       - name: Install Siskin Builder
-        uses: oldes/install-siskin@v0.4.1
+        uses: oldes/install-siskin@v0.7.2
 
 #      - name: Build 32bit Rebol Triangulate extension
 #        run: ./siskin Rebol-Triangulate.nest [%triangulate-linux-x86]
@@ -91,7 +91,7 @@ jobs:
         uses: actions/checkout@v2
 
       - name: Install Siskin Builder
-        uses: oldes/install-siskin@v0.4.1
+        uses: oldes/install-siskin@v0.7.2
 
       - name: Build 64bit Rebol Triangulate extension
         run: ./siskin Rebol-Triangulate.nest [%triangulate-x64]
