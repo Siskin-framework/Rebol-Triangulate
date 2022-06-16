@@ -28,6 +28,12 @@ jobs:
     - name: Prepare 64bit Rebol Triangulate extension
       run:  COPY .\msvc\Release-x64\triangulate-x64.dll triangulate-windows-x64.rebx
 
+    - name: Build 32bit Rebol Triangulate extension
+      run: ./siskin Rebol-Triangulate.nest --msvc %triangulate-x86
+
+    - name: Prepare 32bit Rebol Triangulate extension
+      run:  COPY .\msvc\Release-Win32\triangulate-x86.dll triangulate-windows-x86.rebx
+
     - name: Install Rebol for extension test
       uses: oldes/install-rebol@v3.8.0
 
@@ -43,6 +49,11 @@ jobs:
       with:
         name: Rebol-Triangulate-CI-${{github.run_id}}
         path: ./triangulate-windows-x64.rebx
+    - uses: actions/upload-artifact@v2
+      with:
+        name: Rebol-Triangulate-CI-${{github.run_id}}
+        path: ./triangulate-windows-x86.rebx
+
 
   linux:
     strategy:
