@@ -4,10 +4,7 @@
 #include <stdlib.h>
 #include <inttypes.h>
 #include "triangle.h"
-
-#include "reb-host.h"
-#include "host-lib.h"
-#include "sys-value.h"
+#include "rebol-extension.h"
 
 REBOOL Triangulate(RXIFRM *frm);
 

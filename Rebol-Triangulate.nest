@@ -9,7 +9,7 @@ github: @triangle
 compiler: gcc
 strip:    on
 
-include: %rebol/src/include/
+include: %src/
 include: %triangle/src/
 file:    %triangle/src/triangle.c
 file:    %src/rebol-triangulate.c
