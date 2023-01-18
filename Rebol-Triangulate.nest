@@ -29,6 +29,7 @@ defines: [
 ]
 
 #if Windows? [
+	defines: TO_WINDOWS
 	defines: _CRT_SECURE_NO_WARNINGS
 	upx: on
 ]
