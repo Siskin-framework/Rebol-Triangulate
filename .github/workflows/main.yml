@@ -35,7 +35,7 @@ jobs:
       run:  COPY .\msvc\Release-Win32\triangulate-x86.dll triangulate-windows-x86.rebx
 
     - name: Install Rebol for extension test
-      uses: oldes/install-rebol@v4.16.0
+      uses: oldes/install-rebol@v3.16.0
 
     - name: Test Triangulate extension
       run:  ./rebol3 test/triangulate-test.r3
@@ -49,7 +49,7 @@ jobs:
       with:
         name: Rebol-Triangulate-CI-${{github.run_id}}
         path: ./triangulate-windows-x64.rebx
-    - uses: actions/upload-artifact@v2
+    - uses: actions/upload-artifact@v4
       with:
         name: Rebol-Triangulate-CI-${{github.run_id}}
         path: ./triangulate-windows-x86.rebx
@@ -85,7 +85,7 @@ jobs:
         run:  mv ./build/triangulate-x64.so triangulate-linux-x64.rebx
 
       - name: Install Rebol for extension test
-        uses: oldes/install-rebol@v4.16.0
+        uses: oldes/install-rebol@v3.16.0
 
       - name: Test Triangulate extension
         run:  ./rebol3 test/triangulate-test.r3
@@ -117,7 +117,7 @@ jobs:
         run:  mv ./build/triangulate-x64.dylib triangulate-macos-x64.rebx
 
       - name: Install Rebol for extension test
-        uses: oldes/install-rebol@v4.16.0
+        uses: oldes/install-rebol@v3.16.0
 
       - name: Test Triangulate extension
         run:  ./rebol3 test/triangulate-test.r3
