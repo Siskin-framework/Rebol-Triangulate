@@ -11,13 +11,13 @@ import 'triangulate
 
 ;- the `inp` object must have at least `points` as a vector with decimal values
 inp: object [
-   points: #[f64! [
+   points: #(f64! [
        0.0   0.0
        10.0  0.0
        10.0  10.0
        0.0   10.0
        2.5   2.5
-   ]]
+   ])
    report: true ;; will print triangulation info
 ]
 
@@ -84,17 +84,17 @@ Edge    6 points:     2    -1  0  -10
 Edge    7 points:     3    -1  0  10
 
 OUT is an object of value:
-  points          vector!    #[vector! decimal! 64 10 [0.0 0.0 10.0 0.0 10.0 10.0 0.0 10.0 2.5 2.5]]
+  points          vector!    #(vector! decimal! 64 10 [0.0 0.0 10.0 0.0 10.0 10.0 0.0 10.0 2.5 2.5])
   attributes      none!      none
-  markers         vector!    #[vector! integer! 32 5 [1 1 1 1 0]]
-  segments        vector!    #[vector! integer! 32 8 [1 0 2 1 3 2 0 3]]
-  segment-markers vector!    #[vector! integer! 32 4 [1 1 1 1]]
-  edges           vector!    #[vector! integer! 32 16 [3 0 0 4 4 3 4 1 1 2 2 4 0 1 2 3]]
-  triangles       vector!    #[vector! integer! 32 12 [3 0 0 4 4 3 4 1 1 2 2 4]]
-  v-points        vector!    #[vector! decimal! 64 8 [-2.5 5.0 7.5 5.0 5.0 -2.5 5.0 7.5]]
+  markers         vector!    #(vector! integer! 32 5 [1 1 1 1 0])
+  segments        vector!    #(vector! integer! 32 8 [1 0 2 1 3 2 0 3])
+  segment-markers vector!    #(vector! integer! 32 4 [1 1 1 1])
+  edges           vector!    #(vector! integer! 32 16 [3 0 0 4 4 3 4 1 1 2 2 4 0 1 2 3])
+  triangles       vector!    #(vector! integer! 32 12 [3 0 0 4 4 3 4 1 1 2 2 4])
+  v-points        vector!    #(vector! decimal! 64 8 [-2.5 5.0 7.5 5.0 5.0 -2.5 5.0 7.5])
   v-attributes    none!      none
-  v-edges         vector!    #[vector! integer! 32 16 [0 -1 0 2 0 3 1 2 1 -1 1 3 2 -1 3 -1]]
-  v-norms         vector!    #[vector! decimal! 64 16 [-10.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0]]
+  v-edges         vector!    #(vector! integer! 32 16 [0 -1 0 2 0 3 1 2 1 -1 1 3 2 -1 3 -1])
+  v-norms         vector!    #(vector! decimal! 64 16 [-10.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0])
 ```
 
 # Delaunay triangulation of a set of vertices
@@ -104,7 +104,7 @@ import 'blend2d
 
 inp: object [
    ; spiral shaped input points
-   points: #[f64! [
+   points: #(f64! [
       390.0 390.0
       327.6 526.4
       187.5 455.4
@@ -120,7 +120,7 @@ inp: object [
       805.5 702.0
       714.0 823.5
       594.0 913.5
-   ]]
+   ])
    report: true
 ]
 

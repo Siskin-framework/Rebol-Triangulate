@@ -8,7 +8,7 @@ import 'blend2d
 
 inp: object [
    ; spiral shaped input points
-   points: #[f64! [
+   points: #(f64! [
       390.0 390.0
       327.6 526.4
       187.5 455.4
@@ -24,7 +24,7 @@ inp: object [
       805.5 702.0
       714.0 823.5
       594.0 913.5
-   ]]
+   ])
    report: true
 ]
 
