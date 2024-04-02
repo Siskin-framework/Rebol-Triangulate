@@ -10,8 +10,7 @@ system/options/quiet: false
 ;; make sure that we load a fresh extension
 try [system/modules/triangulate: none]
 ;; use project's root directory as a modules location
-system/options/modules: to-real-file %../
-list-dir (system/options/modules)
+system/options/modules: dirize to-real-file %../
 
 import 'triangulate
 
