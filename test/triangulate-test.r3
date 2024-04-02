@@ -5,6 +5,7 @@ Rebol [
 random/seed 2021
 
 system/options/log/rebol: 4
+system/options/quiet: false
 
 ;; make sure that we load a fresh extension
 try [system/modules/triangulate: none]
