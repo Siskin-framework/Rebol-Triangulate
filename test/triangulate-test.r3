@@ -4,17 +4,12 @@ Rebol [
 
 random/seed 2021
 
-unless value? 'triangulate [
-   target: rejoin [system/build/os #"-" system/build/arch]
-   print as-yellow "Trying to import Triangulate extension..."
-   try/except [
-      import to-real-file rejoin [%../triangulate- target %.rebx]
-   ][
-      print as-purple system/state/last-error
-      print as-red "Import failed!"
-      halt
-   ]
-]
+;; make sure that we load a fresh extension
+try [system/modules/triangulate: none]
+;; use project's root directory as a modules location
+system/options/modules: to-real-file %../
+
+import 'triangulate
 
 inp: object [
    points: #(f64! [

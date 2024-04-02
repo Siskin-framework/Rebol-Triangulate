@@ -5,19 +5,12 @@ Rebol [
 
 random/seed 2021
 
-;@@ not using `import`, because this script is used for testing fresh builds
-unless value? 'triangulate [
-	target: rejoin [system/build/os #"-" system/build/arch]
-	print as-yellow "Trying to import Triangulate extension..."
-	try/except [
-		import to-real-file rejoin [%../triangulate- target %.rebx]
-	][
-		print as-purple system/state/last-error
-		print as-red "Import failed!"
-		quit/return 1
-	]
-]
+;; make sure that we load a fresh extension
+try [system/modules/triangulate: none]
+;; use project's root directory as a modules location
+system/options/modules: to-real-file %../
 
+import 'triangulate
 import 'blend2d ;- Blend2D is used to draw images
 
 
