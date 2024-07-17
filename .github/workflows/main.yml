@@ -36,12 +36,12 @@ jobs:
 
     - name: Install Rebol for extension test
       uses: oldes/install-rebol@v3.17.0
+      with:
+        product: Bulk
 
     - name: Test Triangulate extension
-      run:  ./rebol3 test/triangulate-test.r3
+      run:  ./rebol3 ci-test.r3
 
-    - name: Test image triangulation
-      run:  ./rebol3 test/triangulate-image.r3
 
     ###############################################################################
     # Collecting build artifacts...
@@ -86,12 +86,11 @@ jobs:
 
       - name: Install Rebol for extension test
         uses: oldes/install-rebol@v3.17.0
+        with:
+          product: Bulk
 
       - name: Test Triangulate extension
-        run:  ./rebol3 test/triangulate-test.r3
-
-      - name: Test image triangulation
-        run:  ./rebol3 test/triangulate-image.r3
+        run:  ./rebol3 ci-test.r3
 
       - name: Compress 64bit Rebol Triangulate extension
         run:  gzip -9 ./triangulate-linux-x64.rebx
@@ -118,12 +117,11 @@ jobs:
 
       - name: Install Rebol for extension test
         uses: oldes/install-rebol@v3.17.0
+        with:
+          product: Bulk
 
       - name: Test Triangulate extension
-        run:  ./rebol3 test/triangulate-test.r3
-
-      - name: Test image triangulation
-        run:  ./rebol3 test/triangulate-image.r3
+        run:  ./rebol3 test/ci-test.r3
 
       - name: Compress 64bit Rebol Triangulate extension
         run:  gzip -9 ./triangulate-macos-x64.rebx

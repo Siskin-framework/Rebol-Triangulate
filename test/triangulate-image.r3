@@ -5,21 +5,6 @@ Rebol [
 
 random/seed 2021
 
-CI?: any [
-	"true" = get-env "CI"
-	"true" = get-env "GITHUB_ACTIONS"
-	"true" = get-env "TRAVIS"
-	"true" = get-env "CIRCLECI"
-	"true" = get-env "GITLAB_CI"
-]
-
-if CI? [
-	;; make sure that we load a fresh extension
-	try [system/modules/triangulate: none]
-	;; use project's root directory as a modules location
-	system/options/modules: dirize to-real-file %../
-]
-
 import 'triangulate
 import 'blend2d ;- Blend2D is used to draw images
 
@@ -147,7 +132,10 @@ draw-frame: does [
 
 triangulate-image: func[file [file!]][
 	print [as-green "Triangulating image:" as-yellow file]
-	inp-img: load file
+	try/with [inp-img: load file][
+		print "Failed to load an image!"
+		quit/return -1
+	]
 	;out-img: resize inp-img sc * inp-img/size ;
 	out-img: make image! reduce [sc * inp-img/size bg]
 	out-file: join %out/ file
@@ -174,5 +162,3 @@ steps: 10
 particles: 14000
 triangulate-image %Spiral_Tribe.jpg
 
-
-halt

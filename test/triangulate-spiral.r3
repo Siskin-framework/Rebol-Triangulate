@@ -3,21 +3,6 @@ Rebol [
    needs: 3.11.0 ;; needed for an automatic extension downloads
 ]
 
-CI?: any [
-   "true" = get-env "CI"
-   "true" = get-env "GITHUB_ACTIONS"
-   "true" = get-env "TRAVIS"
-   "true" = get-env "CIRCLECI"
-   "true" = get-env "GITLAB_CI"
-]
-
-if CI? [
-   ;; make sure that we load a fresh extension
-   try [system/modules/triangulate: none]
-   ;; use project's root directory as a modules location
-   system/options/modules: dirize to-real-file %../
-]
-
 import 'triangulate
 import 'blend2d
 
