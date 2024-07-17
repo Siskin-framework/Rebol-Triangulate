@@ -7,17 +7,18 @@ print ["Running test on Rebol build:" mold to-block system/build]
 system/options/quiet: false
 system/options/log/rebol: 4
 
-CI?: any [
+if CI?: any [
     "true" = get-env "CI"
     "true" = get-env "GITHUB_ACTIONS"
     "true" = get-env "TRAVIS"
     "true" = get-env "CIRCLECI"
     "true" = get-env "GITLAB_CI"
-]
-
-if CI? [
-    ;; for the CI test the module is the build directory 
-    system/options/modules: what-dir
+][
+    ;; configure modules location for the CI test 
+    system/options/modules: dirize to-rebol-file any [
+    	get-env 'REBOL_MODULES_DIR
+    	what-dir
+    ]
     ;; make sure that we load a fresh extension
 	try [system/modules/triangulate: none]
 ]
