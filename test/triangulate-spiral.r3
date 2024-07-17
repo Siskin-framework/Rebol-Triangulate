@@ -46,4 +46,6 @@ img: draw 1024x1024 [
    fill red   point :inp/points
 ]
 
-save %out/spiral.png img
+try/with [
+   save %out/spiral.png img
+][ print "Failed to save the image!"]

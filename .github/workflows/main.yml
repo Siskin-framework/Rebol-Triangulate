@@ -121,7 +121,7 @@ jobs:
           product: Bulk
 
       - name: Test Triangulate extension
-        run:  ./rebol3 test/ci-test.r3
+        run:  ./rebol3 ./ci-test.r3
 
       - name: Compress 64bit Rebol Triangulate extension
         run:  gzip -9 ./triangulate-macos-x64.rebx

@@ -134,7 +134,7 @@ triangulate-image: func[file [file!]][
 	print [as-green "Triangulating image:" as-yellow file]
 	try/with [inp-img: load file][
 		print "Failed to load an image!"
-		quit/return -1
+		quit
 	]
 	;out-img: resize inp-img sc * inp-img/size ;
 	out-img: make image! reduce [sc * inp-img/size bg]
@@ -142,7 +142,10 @@ triangulate-image: func[file [file!]][
 
 	print dt [loop steps [draw-frame]]
 
-	save out-file resize out-img 50%
+	try/with [
+	   save out-file resize out-img 50%
+	][ print "Failed to save the result."]
+	
 	;view load out-file
 	out-file
 ]
