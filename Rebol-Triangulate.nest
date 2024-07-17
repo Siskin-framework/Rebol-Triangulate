@@ -34,7 +34,7 @@ defines: [
 	upx: on
 ]
 
-#if macOS? [
+#if BSD? [
 	compiler: clang
 ]
 
