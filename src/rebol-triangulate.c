@@ -16,7 +16,7 @@ const char *init_block =
 		"Type: module\n"
 		"Name: triangulate\n"
 		"Exports: [triangulate]\n"
-		"Version: 1.6.0.1\n"
+		"Version: 1.6.1\n"
 		"License: Apache-2.0\n"
 		"Url: https://github.com/Siskin-framework/Rebol-Triangulate\n"
 		"Needs: 3.11.0\n"

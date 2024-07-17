@@ -9,6 +9,8 @@ github: @triangle
 compiler: gcc
 strip:    on
 
+version: 1.6.1
+
 include: %src/
 include: %triangle/src/
 file:    %triangle/src/triangle.c
@@ -52,6 +54,10 @@ arch-x64: [
 		defines: TO_WIN32_X64
 		defines: __LLP64__
 	]
+	#if macOS?   [
+		defines: TO_OSX_X64
+		flags: ["-arch x86_64"]
+	]
 ]
 arch-x86: [
 	arch: x86
@@ -64,13 +70,32 @@ arch-x86: [
 	]
 ]
 
+arch-arm64: [
+	arch: arm64
+	;flags: ["-arch arm64"]
+	#if macOS? [
+		flags: "-target arm64-apple-darwin"
+	]
+	define: _FILE_OFFSET_BITS=64
+	define: __LP64__ ; has long (integer) 64 bits
+	define: __arm64__
+	#if macOS?   [
+		defines: TO_OSX_X64
+		flags: ["-arch arm64"]
+	]
+]
+
 eggs: [
-	"Rebol/triangulate extension 32bit" [
+	"Rebol/triangulate extension x86" [
 		name:    %triangulate-x86
 		:arch-x86
 	]
-	"Rebol/triangulate extension 64bit" [
+	"Rebol/triangulate extension x64" [
 		name:    %triangulate-x64
 		:arch-x64
+	]
+	"Rebol/triangulate extension arm64" [
+		name:    %triangulate-arm64
+		:arch-arm64
 	]
 ]
