@@ -57,7 +57,26 @@ triangulate inp out ;; the triangulation request
 
 ;- the `out` object should now contain the result of the triangulation
 
-? out
+assert [ out/points          == #(f64! [0.0 0.0 10.0 0.0 10.0 10.0 0.0 10.0 2.5 2.5])]
+assert [ out/attributes      == none]
+assert [ out/markers         == #(i32! [1 1 1 1 0])]
+assert [ out/segments        == #(i32! [1 0 2 1 3 2 0 3])]
+assert [ out/segment-markers == #(i32! [1 1 1 1])]
+assert [ out/edges           == #(i32! [3 0 0 4 4 3 4 1 1 2 2 4 0 1 2 3])]
+assert [ out/triangles       == #(i32! [3 0 0 4 4 3 4 1 1 2 2 4])]
+assert [ out/v-points        == #(f64! [-2.5 5.0 7.5 5.0 5.0 -2.5 5.0 7.5])]
+assert [ out/v-attributes    == none]
+assert [ out/v-edges         == #(i32! [0 -1 0 2 0 3 1 2 1 -1 1 3 2 -1 3 -1])]
+assert [ out/v-norms         == #(f64! [-10.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0])]
+
+;; The following scripts require the Blend2D extension, which may not be available on all platforms.
+;; Only execute these scripts if the import does not fail.
+
+try/with [import 'blend2d][
+	print "Failed to import Rebol/Blend2D extension!"
+	print "Skipping some tests!"
+	quit
+]
 
 print-horizontal-line
 do %test/triangulate-image.r3
