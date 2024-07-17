@@ -20,7 +20,7 @@ jobs:
       uses: actions/checkout@v4
 
     - name: Install Siskin Builder
-      uses: oldes/install-siskin@v0.7.1
+      uses: oldes/install-siskin@v0.17.0
 
     - name: Build 64bit Rebol Triangulate extension
       run: ./siskin Rebol-Triangulate.nest --msvc %triangulate-x64
@@ -35,13 +35,13 @@ jobs:
       run:  COPY .\msvc\Release-Win32\triangulate-x86.dll triangulate-windows-x86.rebx
 
     - name: Install Rebol for extension test
-      uses: oldes/install-rebol@v3.16.0
+      uses: oldes/install-rebol@v3.17.0
 
     - name: Test Triangulate extension
       run:  ./rebol3 test/triangulate-test.r3
 
-#    - name: Test image triangulation
-#      run:  ./rebol3 test/triangulate-image.r3
+    - name: Test image triangulation
+      run:  ./rebol3 test/triangulate-image.r3
 
     ###############################################################################
     # Collecting build artifacts...
@@ -68,7 +68,7 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Install Siskin Builder
-        uses: oldes/install-siskin@v0.7.1
+        uses: oldes/install-siskin@v0.17.0
 
 #      - name: Build 32bit Rebol Triangulate extension
 #        run: ./siskin Rebol-Triangulate.nest [%triangulate-linux-x86]
@@ -85,13 +85,13 @@ jobs:
         run:  mv ./build/triangulate-x64.so triangulate-linux-x64.rebx
 
       - name: Install Rebol for extension test
-        uses: oldes/install-rebol@v3.16.0
+        uses: oldes/install-rebol@v3.17.0
 
       - name: Test Triangulate extension
         run:  ./rebol3 test/triangulate-test.r3
 
-#      - name: Test image triangulation
-#        run:  ./rebol3 test/triangulate-image.r3
+      - name: Test image triangulation
+        run:  ./rebol3 test/triangulate-image.r3
 
       - name: Compress 64bit Rebol Triangulate extension
         run:  gzip -9 ./triangulate-linux-x64.rebx
@@ -108,7 +108,7 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Install Siskin Builder
-        uses: oldes/install-siskin@v0.7.1
+        uses: oldes/install-siskin@v0.17.0
 
       - name: Build 64bit Rebol Triangulate extension
         run: ./siskin Rebol-Triangulate.nest %triangulate-x64
@@ -117,13 +117,13 @@ jobs:
         run:  mv ./build/triangulate-x64.dylib triangulate-macos-x64.rebx
 
       - name: Install Rebol for extension test
-        uses: oldes/install-rebol@v3.16.0
+        uses: oldes/install-rebol@v3.17.0
 
       - name: Test Triangulate extension
         run:  ./rebol3 test/triangulate-test.r3
 
-#      - name: Test image triangulation
-#        run:  ./rebol3 test/triangulate-image.r3
+      - name: Test image triangulation
+        run:  ./rebol3 test/triangulate-image.r3
 
       - name: Compress 64bit Rebol Triangulate extension
         run:  gzip -9 ./triangulate-macos-x64.rebx

@@ -380,7 +380,7 @@ REBOOL Triangulate(RXIFRM *frm) {
 			memcpy((void*)vect->data, (const void*)vorout.edgelist, sizeof(int) * vorout.numberofedges * 2);
 			arg.series = vect;
 			arg.index = 0;
-			RL_SET_FIELD(objOut, wEdges, arg, RXT_VECTOR);
+			RL_SET_FIELD(objOut, wVEdges, arg, RXT_VECTOR);
 		}
 	}
 	if (vorout.numberofedges > 0) {

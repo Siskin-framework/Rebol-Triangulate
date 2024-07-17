@@ -1,14 +1,24 @@
 Rebol [
 	Title: "Trianguale image (resize and add line effect)"
-	needs: 3.9.0 ; to automatically install Blend2D extension
+	needs: 3.11.0 ; to automatically install Blend2D extension
 ]
 
 random/seed 2021
 
-;; make sure that we load a fresh extension
-try [system/modules/triangulate: none]
-;; use project's root directory as a modules location
-system/options/modules: dirize to-real-file %../
+CI?: any [
+	"true" = get-env "CI"
+	"true" = get-env "GITHUB_ACTIONS"
+	"true" = get-env "TRAVIS"
+	"true" = get-env "CIRCLECI"
+	"true" = get-env "GITLAB_CI"
+]
+
+if CI? [
+	;; make sure that we load a fresh extension
+	try [system/modules/triangulate: none]
+	;; use project's root directory as a modules location
+	system/options/modules: dirize to-real-file %../
+]
 
 import 'triangulate
 import 'blend2d ;- Blend2D is used to draw images
@@ -94,7 +104,7 @@ draw-frame: does [
 
 	;if find out 'v-points [sc * out/v-points]
 
-	if find out 'v-edges [
+	if block? select out 'v-edges [
 		temp:  make block! (length? out/v-points) / 2
 		norms: make block! 1000
 		while [not tail? out/v-edges][
