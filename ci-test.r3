@@ -17,7 +17,7 @@ CI?: any [
 
 if CI? [
     ;; for the CI test the module is the build directory 
-    system/options/modules: dirize to-real-file %build/ ;@@ to-real-file on linux does not include the tailing slash!
+    system/options/modules: what-dir
     ;; make sure that we load a fresh extension
 	try [system/modules/triangulate: none]
 ]
