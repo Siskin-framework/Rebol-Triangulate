@@ -39,9 +39,9 @@ jobs:
 
     ###############################################################################
     # Collecting build artifacts...
-    - uses: actions/upload-artifact@v3
+    - uses: actions/upload-artifact@v4
       with:
-        name: Rebol-Triangulate-CI-${{github.run_id}}
+        name: Rebol-Triangulate-CI-windows-${{github.run_id}}
         path: ./triangulate-windows-*.rebx
 
   linux:
@@ -84,9 +84,9 @@ jobs:
       - name: Compress 64bit Rebol Triangulate extension
         run:  gzip -9 ./triangulate-linux-x64.rebx
 
-      - uses: actions/upload-artifact@v3
+      - uses: actions/upload-artifact@v4
         with:
-          name: Rebol-Triangulate-CI-${{github.run_id}}
+          name: Rebol-Triangulate-CI-linux-${{github.run_id}}
           path: ./triangulate-linux-*
 
   macos:
@@ -118,7 +118,7 @@ jobs:
       - name: Compress arm64 Rebol Triangulate extension
         run:  gzip -9 ./triangulate-macos-arm64.rebx
 
-      - uses: actions/upload-artifact@v3
+      - uses: actions/upload-artifact@v4
         with:
-          name: Rebol-Triangulate-CI-${{github.run_id}}
+          name: Rebol-Triangulate-CI-macos-${{github.run_id}}
           path: ./triangulate-macos-*
