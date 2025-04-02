@@ -1,6 +1,9 @@
-# Rebol/Triangulate
+![rebol-triangulator](https://github.com/user-attachments/assets/718e7a19-eaf5-4c1a-9a35-7b787c199833)
 
 [![Rebol-Triangulate CI](https://github.com/Siskin-framework/Rebol-Triangulate/actions/workflows/main.yml/badge.svg)](https://github.com/Siskin-framework/Rebol-Triangulate/actions/workflows/main.yml)
+[![Gitter](https://badges.gitter.im/rebol3/community.svg)](https://app.gitter.im/#/room/#Rebol3:gitter.im)
+
+# Rebol/Triangulate
 
 [Triangle](https://www.cs.cmu.edu/~quake/triangle.html) (A Two-Dimensional Quality Mesh Generator and Delaunay Triangulator) extension for [Rebol3](https://github.com/Siskin-framework/Rebol)
 
